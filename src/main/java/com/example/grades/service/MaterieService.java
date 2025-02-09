@@ -2,95 +2,75 @@ package com.example.grades.service;
 
 import com.example.grades.domain.Materie;
 import com.example.grades.domain.Procentaje;
-import com.example.grades.domain.ValidationException;
 import com.example.grades.repository.MaterieRepository;
+import com.example.grades.repository.ProcenteRepository;
+import com.example.grades.validator.MaterieValidator;
+import com.example.grades.validator.ProcentajeValidator;
+import com.example.grades.validator.ValidationException;
 
 import java.util.List;
 
 public class MaterieService {
     private final MaterieRepository repository;
+    private final ProcenteRepository procenteRepository;
+    private final MaterieValidator materieValidator;
 
-    public MaterieService(MaterieRepository repository) {
+    public MaterieService(MaterieRepository repository, ProcenteRepository procenteRepository) {
         this.repository = repository;
+        this.procenteRepository = procenteRepository;
+        this.materieValidator = new MaterieValidator();
     }
 
-    public int getIdMaterieNou()
-    {
-        List<Materie> materii=getAllMaterii();
-        if(materii.isEmpty())
-            return 1;
-        int id_nr=0;
-        for(Materie materie:materii) {
-            id_nr++;
+    public boolean existaMaterie(int userId, String nume) {
+        return repository.getMateriiByUser(userId).stream()
+                .anyMatch(m -> m.getNume().equalsIgnoreCase(nume));
+    }
+
+    public void adaugaMaterie(int userId, String nume, int numarCredite) {
+        if (nume == null || nume.isEmpty()) {
+            throw new ValidationException("Numele materiei nu poate fi gol!");
         }
-        id_nr++;
-        return id_nr;
+        repository.addMaterie(userId, nume, numarCredite);
     }
 
-    public void adaugaMaterie(String nume) throws IllegalArgumentException {
-        if(nume==null || nume.length()==0)
-            throw new IllegalArgumentException("Numele nu poate fi vid");
-        int id=getIdMaterieNou();
-        Materie materie=new Materie(id,nume);
-        try {
-            repository.addMaterie(materie);
-        } catch (ValidationException e) {
-            throw new RuntimeException(e);
+    public List<Materie> getMateriiForUser(int userId) {
+        List<Materie> materii = repository.getMateriiByUser(userId);
+
+        for (Materie materie : materii) {
+            double media = calculeazaMedia(materie.getId());
+            materie.setMedia(media);
         }
+
+        return materii;
     }
 
-    public boolean stergeMaterie(String nume) throws IllegalArgumentException {
-        if(nume==null || nume.length()==0)
-            throw new IllegalArgumentException("Numele nu poate fi vid");
-        Materie materie=getMaterieByNume(nume);
-        return repository.removeMaterie(materie);
+    public void stergeMaterie(int userId, int materieId) {
+        repository.removeMaterie(userId, materieId);
     }
 
-    public boolean adaugaProcentaj(int idMaterie, Procentaje procentaj) throws IllegalArgumentException {
-        if(getMaterieById(idMaterie)==null)
-            throw new IllegalArgumentException("Nu exista materia");
-        return repository.addProcentaj(idMaterie, procentaj);
-    }
-
-    public boolean stergeProcentaj(int materieId, double procentaj, double nota) throws IllegalArgumentException {
-        if(getMaterieById(materieId)==null)
-            throw new IllegalArgumentException("Nu exista materia");
-        return repository.removeProcentaj(materieId, procentaj, nota);
-    }
-
-    public List<Materie> getAllMaterii() {
-        return repository.getAllMaterii();
-    }
-
-    public Materie getMaterieById(int id) {
-        return repository.findMaterieById(id);
-    }
-
-    public Materie getMaterieByNume(String nume) {
-        return repository.findMaterieByNume(nume);
-    }
-
-    public List<Procentaje> getMaterieProcentaje(int idMaterie) {
-        return repository.getProcentajeByMaterie(idMaterie);
-    }
-
-    public double calculeazaMedia(int id) throws IllegalArgumentException{
-        Materie materie = repository.findMaterieById(id);
-        if (materie == null) {
-            throw new IllegalArgumentException("Materia nu exista.");
-        }
-        List<Procentaje> procentaje = repository.getProcentajeByMaterie(id);
+    public double calculeazaMedia(int materieId) {
+        List<Procentaje> procentaje = procenteRepository.getProcentajeByMaterie(materieId);
         double suma = 0;
-        int totalProcente = 0;
+        double totalProcente = 0;
 
         for (Procentaje p : procentaje) {
-            suma += p.getNota() * p.getProcent();
+            suma += p.getNota() * (p.getProcent() / 100.0);
             totalProcente += p.getProcent();
         }
-        if (totalProcente > 0) {
-            return suma / totalProcente;
-        } else {
-            return 0;
+        return totalProcente > 0 ? suma : 0;
+    }
+
+    public double calculeazaMediaFinala(List<Materie> materii) {
+        double sumaPonderata = 0;
+        double totalCredite = 0;
+
+        for (Materie materie : materii) {
+            double mediaMaterie = calculeazaMedia(materie.getId());
+            int credite = materie.getNumarCredite();
+            sumaPonderata += Math.round(mediaMaterie) * credite;
+            totalCredite += credite;
         }
+
+        return (totalCredite > 0) ? sumaPonderata / totalCredite : 0;
     }
 }

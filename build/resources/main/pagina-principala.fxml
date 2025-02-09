@@ -3,35 +3,45 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1500.0" style="-fx-background-color: #a7bbde;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.grades.controller.MediiController">
+<AnchorPane prefHeight="650.0" prefWidth="600.0" style="-fx-background-color: #b2bccb;"
+            xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.grades.controller.MediiController">
+
   <children>
-    <Label text="Calculator de medii pentru facultate" layoutX="550.0" layoutY="30.0"
-           style="-fx-font-size: 24px; -fx-font-weight: bold;" />
-    <ListView fx:id="materiiListView" layoutX="50.0" layoutY="130.0" prefWidth="400.0" prefHeight="400.0" />
+    <Label text="Calculator de medii" layoutX="200.0" layoutY="20.0"
+           style="-fx-font-size: 22px; -fx-font-weight: bold;" />
 
-    <VBox layoutX="550.0" layoutY="150.0" spacing="20.0" alignment="CENTER">
-      <TextField fx:id="nume" promptText="Introduceti materia" prefWidth="250.0" />
-      <Button onAction="#adaugaMaterie" text="Adaugă Materie" prefWidth="250.0" />
-      <Button onAction="#stergeMaterie" text="Șterge Materie" prefWidth="250.0" />
+    <TableView fx:id="materiiTableView" layoutX="50.0" layoutY="60.0" prefWidth="500.0" prefHeight="250.0"
+               style="-fx-border-color: #0A2748; -fx-border-radius: 5px;">
+      <columns>
+        <TableColumn fx:id="materieColumn" text="Materie" prefWidth="200.0"/>
+        <TableColumn fx:id="crediteColumn" text="Credite" prefWidth="150.0"/>
+        <TableColumn fx:id="mediaColumn" text="Media" prefWidth="150.0"/>
+      </columns>
+    </TableView>
+
+    <Label text="Pentru a calcula nota finală a materiei, apăsați dublu click pe aceasta."
+           layoutX="80.0" layoutY="315.0"
+           style="-fx-font-size: 16px;-fx-text-fill: #0A2748;" />
+
+    <VBox layoutX="150.0" layoutY="360.0" spacing="10.0" alignment="CENTER">
+      <TextField fx:id="numeMaterieField" promptText="Introduceți materia" prefWidth="300.0"
+                 style="-fx-border-color: #0A2748; -fx-border-radius: 5px; -fx-padding: 5px;"/>
+      <TextField fx:id="numarCrediteField" promptText="Introduceți numărul de credite" prefWidth="300.0"
+                 style="-fx-border-color: #0A2748; -fx-border-radius: 5px; -fx-padding: 5px;"/>
+      <Button onAction="#adaugaMaterie" text="Adaugă Materie" prefWidth="300.0"
+              style="-fx-background-color: #0A2748; -fx-text-fill: white; -fx-font-size: 14px;"/>
+      <Button onAction="#stergeMaterie" text="Șterge Materie" prefWidth="300.0"
+              style="-fx-background-color: #0A2748; -fx-text-fill: white; -fx-font-size: 14px;"/>
     </VBox>
 
-    <VBox layoutX="550.0" layoutY="300.0" spacing="20.0" alignment="CENTER">
-      <TextField fx:id="notaField" promptText="Introduceți nota" prefWidth="250.0" />
-      <TextField fx:id="procentajField" promptText="Introduceți procentajul" prefWidth="250.0" />
-      <Button onAction="#adaugaNotaProcentaj" text="Adaugă Nota și Procentaj" prefWidth="250.0" />
-      <Button onAction="#stergeNotaProcentaj" text="Sterge Nota și Procentaj" prefWidth="250.0" />
-    </VBox>
-
-    <VBox layoutX="620.0" layoutY="500.0" spacing="20.0" alignment="CENTER">
-      <Label fx:id="mediaLabel" text="Media: " style="-fx-font-size: 16px; -fx-text-fill: black; padding: 5px;" />
-    </VBox>
-
-    <VBox layoutX="900.0" layoutY="100.0" spacing="15.0" alignment="TOP_CENTER">
-      <Label text="Procentaje - Note" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: black; padding: 5px;"/>
-      <ListView fx:id="detaliiListView" prefHeight="350.0" prefWidth="400.0" style="-fx-text-fill: black; -fx-border-color: #0C2A65FF;" />
-     </VBox>
+    <HBox layoutX="80.0" layoutY="550.0" spacing="10.0" alignment="CENTER">
+      <Button onAction="#calculeazaMediaFinala" text="Calculează Media Finală" prefWidth="300.0" prefHeight="45.0"
+              style="-fx-background-color: #0A2748; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+      <Label fx:id="mediaFinalaLabel" text="Media Finală: -" layoutX="430.0" layoutY="500.0"
+             style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #0A2748;" />
+    </HBox>
 
   </children>
 </AnchorPane>

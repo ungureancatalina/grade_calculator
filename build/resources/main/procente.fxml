@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="450.0" prefWidth="600.0" style="-fx-background-color: #b2bccb;"
+            xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.grades.controller.DetaliiMaterieController">
+
+    <children>
+        <Label fx:id="materieLabel" text="Numele Materiei" layoutX="270.0" layoutY="20.0"
+               style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+        <TableView fx:id="detaliiTableView" layoutX="50.0" layoutY="60.0" prefWidth="500.0" prefHeight="200.0">
+            <columns>
+                <TableColumn fx:id="procentajColumn" text="Procentaj" prefWidth="250.0"/>
+                <TableColumn fx:id="notaColumn" text="Nota" prefWidth="250.0"/>
+            </columns>
+        </TableView>
+
+        <VBox layoutX="150.0" layoutY="280.0" spacing="10.0" alignment="CENTER">
+            <TextField fx:id="notaField" promptText="Introduceți nota" prefWidth="300.0"
+                       style="-fx-border-color: #0A2748; -fx-border-radius: 5px; -fx-padding: 5px;" />
+            <TextField fx:id="procentajField" promptText="Introduceți procentajul" prefWidth="300.0"
+                       style="-fx-border-color: #0A2748; -fx-border-radius: 5px; -fx-padding: 5px;" />
+            <Button onAction="#adaugaNotaProcentaj" text="Adaugă Nota și Procentaj" prefWidth="300.0"
+                    style="-fx-background-color: #0A2748; -fx-text-fill: white; -fx-font-size: 14px;" />
+            <Button onAction="#stergeNotaProcentaj" text="Șterge Nota și Procentaj" prefWidth="300.0"
+                    style="-fx-background-color: #0A2748; -fx-text-fill: white; -fx-font-size: 14px;" />
+        </VBox>
+    </children>
+</AnchorPane>

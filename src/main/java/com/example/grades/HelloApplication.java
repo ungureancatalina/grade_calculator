@@ -1,49 +1,50 @@
 package com.example.grades;
 
+import com.example.grades.controller.LoginController;
+import com.example.grades.repository.ProcenteRepository;
+import com.example.grades.repository.UserRepository;
+import com.example.grades.repository.MaterieRepository;
+import com.example.grades.service.MaterieService;
+import com.example.grades.service.ProcenteService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
-public class HelloApplication extends Application
-{
-    public static final String url = "jdbc:postgresql://localhost:5432/grades";
-    public static final String user = "postgres";
-    public static final String password = "catalina";
+public class HelloApplication extends Application {
+    private static final String URL = "jdbc:postgresql://localhost:5432/grades";
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "catalina";
 
     @Override
-    public void start(Stage stage) throws IOException, SQLException {
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            System.out.println("S-a conectat la baza de date");
-        } catch (SQLException e) {
-            System.out.println("Eroare la conectarea la baze de date");
-            e.printStackTrace();
-        }
-        initLoginView(stage);
-        stage.setWidth(1500);
-        stage.setHeight(800);
-        stage.setX(220);
-        stage.setY(130);
-        stage.setTitle("Calculator de medii");
+    public void start(Stage stage) throws IOException {
+        String URL = "jdbc:postgresql://localhost:5432/grades";
+        String USER = "postgres";
+        String PASSWORD = "catalina";
+
+        UserRepository userRepository = new UserRepository(URL, USER, PASSWORD);
+        MaterieRepository materieRepository = new MaterieRepository(URL, USER, PASSWORD);
+        ProcenteRepository procenteRepository = new ProcenteRepository(URL, USER, PASSWORD);
+
+        MaterieService materieService = new MaterieService(materieRepository, procenteRepository);
+        ProcenteService procenteService = new ProcenteService(materieRepository, procenteRepository);
+
+        FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/login.fxml"));
+        Scene loginScene = new Scene(loginLoader.load());
+
+        LoginController loginController = loginLoader.getController();
+        loginController.setUserRepository(userRepository);
+        loginController.setMaterieService(materieService);
+        loginController.setProcenteService(procenteService);
+
+        stage.setScene(loginScene);
+        stage.setTitle("Login");
         stage.show();
     }
 
-
-    private void initLoginView(Stage primaryStage) throws IOException {
-        FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/pagina-principala.fxml"));
-        Scene loginScene = new Scene(loginLoader.load());
-        primaryStage.setScene(loginScene);
-        primaryStage.show();
-    }
 
     public static void main(String[] args) {
         launch();
     }
 }
-
-

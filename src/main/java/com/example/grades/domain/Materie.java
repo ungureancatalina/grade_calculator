@@ -1,48 +1,55 @@
 package com.example.grades.domain;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Materie {
-    private int id;
-    private String nume;
-    private List<Procentaje> procentaje;
+    private final SimpleIntegerProperty id;
+    private final SimpleStringProperty nume;
+    private final SimpleIntegerProperty numarCredite;
+    private final SimpleDoubleProperty media;
+    private final List<Procentaje> procentaje;
 
-    public Materie(int id, String nume) {
-        this.id = id;
-        this.nume = nume;
+    public Materie(int id, String nume, int numarCredite) {
+        this.id = new SimpleIntegerProperty(id);
+        this.nume = new SimpleStringProperty(nume);
+        this.numarCredite = new SimpleIntegerProperty(numarCredite);
+        this.media = new SimpleDoubleProperty(0);
         this.procentaje = new ArrayList<>();
     }
 
     public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        return id.get();
     }
 
     public String getNume() {
-        return nume;
+        return nume.get();
     }
 
-    public void setNume(String nume) {
-        this.nume = nume;
+    public int getNumarCredite() {
+        return numarCredite.get();
     }
+
+    public double getMedia() {
+        return media.get();
+    }
+
+    public void setMedia(double valoareMedia) {
+        this.media.set(valoareMedia);
+    }
+
     public List<Procentaje> getProcentaje() {
         return procentaje;
     }
-    public void addProcentaj(Procentaje procentaj) {
-        this.procentaje.add(procentaj);
+
+    public SimpleStringProperty numeProperty() {
+        return nume;
     }
 
-    public boolean removeProcentaj(Procentaje procentaj) {
-        return this.procentaje.remove(procentaj);
+    public SimpleDoubleProperty mediaProperty() {
+        return media;
     }
-
-    @Override
-    public String toString() {
-        return "Materie: " + nume;
-    }
-
 }

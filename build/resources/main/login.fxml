@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="350.0" prefWidth="600.0" style="-fx-background-color: #b2bccb;" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.grades.controller.LoginController">
+    <children>
+        <Label text="Login - Register" layoutX="200.0" layoutY="40.0" style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+        <TextField fx:id="usernameField" promptText="Username" layoutX="150.0" layoutY="100.0" prefWidth="300.0"
+                   style="-fx-border-color: #0A2748; -fx-border-radius: 5px; -fx-padding: 5px;"/>
+        <PasswordField fx:id="passwordField" promptText="Password" layoutX="150.0" layoutY="140.0" prefWidth="300.0"
+                       style="-fx-border-color: #0A2748; -fx-border-radius: 5px; -fx-padding: 5px;"/>
+        <Button onAction="#login" text="Login" layoutX="150.0" layoutY="200.0" prefWidth="300.0"
+                style="-fx-background-color: #0A2748; -fx-text-fill: white; -fx-font-size: 14px;"/>
+        <Button onAction="#register" text="Register" layoutX="150.0" layoutY="250.0" prefWidth="300.0"
+                style="-fx-background-color: #0A2748; -fx-text-fill: white; -fx-font-size: 14px;"/>
+        <Label fx:id="errorLabel" layoutX="150.0" layoutY="320.0" textFill="red" style="-fx-font-size: 14px;"/>
+    </children>
+</AnchorPane>
